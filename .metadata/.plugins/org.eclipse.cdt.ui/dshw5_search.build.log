@@ -1,0 +1,15 @@
+17:44:39 **** Build of configuration Debug for project dshw5_search ****
+make all 
+Building file: ../src/dshw5_search.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/dshw5_search.d" -MT"src/dshw5_search.d" -o "src/dshw5_search.o" "../src/dshw5_search.cpp"
+Finished building: ../src/dshw5_search.cpp
+ 
+Building target: dshw5_search
+Invoking: GCC C++ Linker
+g++  -o "dshw5_search"  ./src/dshw5_search.o   
+Finished building target: dshw5_search
+ 
+
+17:44:42 Build Finished (took 3s.82ms)
+

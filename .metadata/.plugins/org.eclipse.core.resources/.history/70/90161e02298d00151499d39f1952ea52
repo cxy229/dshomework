@@ -1,0 +1,12 @@
+void main(int i) {
+    if(i != 448)
+        main(i+1);
+    i--;
+    if(i % 64 == 0) {
+        putchar('\n');
+    } else {
+        char a = -~7[__TIME__-i/8%8][">'txiZ^(~z?"-48];
+        char b = a >> ";;;====~$::199"[i*2&8|i/64]/(i&2?1:8)%8;
+        putchar(32 | (b & 1));
+    }
+}

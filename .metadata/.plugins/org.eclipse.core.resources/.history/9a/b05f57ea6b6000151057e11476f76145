@@ -1,0 +1,300 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <cassert>
+#include <cctype>
+using namespace std;
+char str[100]; //输入的命题公式
+int tv[20] = {0}; //真值指派的数组
+int length; //命题公式长度
+char expression[100]; //将命题公式中的命题变元变为真值后的数组
+int icp(const char c) //联结词的栈外优先级
+{
+	int result = -1;
+	switch(c)
+	{
+	case '#': result = 0; break;
+	case '(': result = 10; break;
+	case '!': result = 9; break;
+	case '&': result = 6; break;
+	case '|': result = 4; break;
+	case '>': result = 2; break;
+	case ')': result = 1;
+	}
+	return result;
+}
+int isp(const char c) //联结词的栈内优先级
+{
+	int result = -1;
+	switch(c)
+	{
+	case '#': result = 0; break;
+	case '(': result = 1; break;
+	case '!': result = 8; break;
+	case '&': result = 7; break;
+	case '|': result = 5; break;
+	case '>': result = 3; break;
+	case ')': result = 10;
+	}
+	return result;
+}
+void Plus(int a[],int q) //二进制加法指派真值
+{
+	a[q]=a[q]+1;
+	for (int i = q; a[i] == 2; i--)
+	{
+		a[i]=0;
+		a[i-1]=a[i-1]+1;
+	}
+}
+template<class T>
+class Stack
+{
+public:
+	virtual bool IsEmpty() const = 0;
+	virtual bool IsFull() const = 0;
+	virtual bool Top(T& x) const = 0;
+	virtual bool Push(T x) = 0;
+	virtual bool Pop() = 0;
+	virtual void Clear() = 0;
+	virtual ~Stack();
+};
+template <class T>
+class SeqStack : public Stack<T> //顺序栈类 {
+public:
+SeqStack(int mSize = 30);
+~SeqStack() { delete []s; }
+bool IsEmpty() const { return top == -1; } bool IsFull() const { return top == maxTop; bool Top(T& x) const;
+bool Push(T x);
+bool Pop();
+void Clear() { top = -1; }
+private:
+int top;
+int maxTop;
+T* s;
+};
+template<class T>
+SeqStack<T>::SeqStack(int mSize)
+{
+	maxTop = mSize - 1;
+	s = new T[mSize]; }
+top = -1;
+}
+template<class T>
+bool SeqStack<T>::Top(T& x) const {
+	if (IsEmpty())
+	{
+		cout << "Empty" << endl; return false;
+	}
+	x = s[top];
+	return true;
+}
+template<class T>
+bool SeqStack<T>::Push(T x)
+{
+	if (IsFull())
+	{
+		cout << "Overflow" << endl; return false;
+	}
+	s[++top]=x;
+	return true;
+}
+template<class T>
+bool SeqStack<T>::Pop()
+{
+	if(IsEmpty())
+	{
+		cout << "Underflow" << endl; }
+	top--;
+	return true;
+}
+class Calculator
+{
+public:
+	Calculator(int maxSize):s(maxSize){} void Change();
+	int Run();
+	void Solve();
+	void Clear() { s.Clear(); }
+private:
+	SeqStack<bool> s; //运算栈
+	void PushOperand(bool);
+	bool GetOperands(bool &, bool &);
+	void DoOperator(char);
+};
+void Calculator::PushOperand(bool op)
+{
+	s.Push(op);
+}
+bool Calculator::GetOperands(bool & op1, bool & op2) //获取栈顶两个元素 {
+if (!s.Top(op1))
+{
+	cerr << "Missing operand!" << endl;
+	return false;
+}
+s.Pop();
+if (!s.Top(op2))
+{
+	cerr << "Missing operand!" << endl;
+	return false;
+}
+s.Pop();
+return true;
+}
+void Calculator::DoOperator(char oper) //联结词运算
+{
+	bool left, right;
+	bool result = GetOperands(left, right);
+	if (result)
+		switch(oper)
+		{
+		case '!': s.Push(!left && right); break; //not运算
+		case '&': s.Push(left && right); break; //and运算
+		case '|': s.Push(left || right); break; //or运算
+		case '>': s.Push(!right || left); break; //条件运算
+		}
+	else
+		Clear();
+}
+void Calculator::Change() //将输入的字符串转化为可计算的表达式
+{
+	int k = 0, t = 0;
+	int flag = 1; //标记，防止相同的命题变元赋入不同的值 int count = 0;
+	for (int i = 0; i < pow(2,count); i++)
+	{
+		k=1;
+		for (int m = 0; m < length; m++)
+		{
+			if (isalpha(str[m])) //将原来的命题变元修改为真值
+			{
+				if (flag == 1)
+				{
+					if(tv[k] == 0)
+						expression[m] = '0';
+					else
+						expression[m] = '1';
+					k++;
+				}
+				else
+					expression[m] = '0';
+				flag = 1;
+				for (t = m; t >= 0; t--)
+					if ((str[m+1] == str[t]) && isalpha(str[m+1]) && isalpha(str[t])) flag = 0;
+			}
+			else
+			{
+				expression[m] = str[m]; //逻辑联结词不变
+				for (t = m; t >= 0; t--)
+					if ((str[m+1] == str[t]) && isalpha(str[m+1]) && isalpha(str[t])) flag = 0;
+			}
+		}
+		for (int t = 0; t < length; t++)
+			for (int j = t; j < length; j++)
+				if (str[t] == str[j])
+					expression[j] = expression[t]; //相同的命题变元复制赋值
+	}
+}
+int Calculator::Run()
+{
+	SeqStack<char> s1; //联结词栈
+	char ch, y;
+	char p[100];
+	int i = 0;
+	s1.Push('#');
+	for (int temp=0; temp < length ; temp++)
+	{
+		ch = expression[temp];
+		if (isdigit(ch))
+		{
+			p[i++] = ch;
+		}
+		else if(ch == ')')
+			for(s1.Top(y), s1.Pop(); y != '('; s1.Top(y), s1.Pop())
+				p[i++] = y;
+		else
+		{
+			if(ch == '!') p[i++] = '1'; //非运算，在!前加1，将!视作双目操作符 for(s1.Top(y), s1.Pop(); icp(ch) <= isp(y); s1.Top(y), s1.Pop()) p[i++] = y;
+			s1.Push(y);
+			s1.Push(ch);
+		}
+	}
+	while(!s1.IsEmpty())
+	{
+		s1.Top(y);
+		s1.Pop();
+		if(y != '#')
+			p[i++] = y;
+	}
+	p[i++] = '#';
+	/* ------↑中缀表达式转化为后缀表达式-----
+------↓计算后缀表达式结果------------- */
+	bool newop;
+	for (i = 0; p[i] !='#'; i++)
+	{
+		switch(p[i])
+		{
+		case '!':
+			cout << "无命题变元,重新输入!" << endl; system("pause"); system("cls"); Solve(); } cout << "真值表:" << endl; for (int w = 0; w < count; w++) cout << index[w] << ' '; for (w = 0; w < length; w++) cout << str[w]; cout << endl; int *truth = new int[pow(2,count)]; int xx = 0, dx = 0; //小项，大项 for (int r = 0; r < pow(2,count); r++) //输出真值表 { for (int j = 1; j <= count; j++) cout << tv[j] << ' '; Change(); truth[r] = Run(); if (truth[r]) //记录小项和大项的个数 xx++; else dx++; Plus(tv,count); } if(xx > 1) //输出主析取范式 { int flag_xx = 0; cout << "主析取范式为 "; for(r = 0; r < pow(2,count); r++) { if (truth[r]) { if (flag_xx) cout << " \\/ "; cout << "m" << r; flag_xx = 1; } } cout << endl; } else cout << "没有主析取范式!" << endl; if(dx > 1) //输出主合取范式 {
+		case '&':
+		case '|':
+		case '>': DoOperator(p[i]); break;
+		default:
+			cin.putback(p[i]);
+			cin >> newop;
+			PushOperand(newop);
+			break;
+	}
+}
+if (s.Top(newop))
+{
+	cout << (int)newop << endl;
+	return (int)newop; //输出并返回最终结果
+}
+}
+void Calculator::Solve()
+{
+	cout << "***************************************" << endl;//标语 cout << "** 欢迎进入逻辑运算软件 **" << endl; cout << "** (可运算真值表，主范式，支持括号) **" << endl; cout << "** **" << endl; cout << "** 用!表示not 用&表示and **" << endl; cout << "** 用|表示or 用>表示蕴含 **" << endl; cout << "** **" << endl; cout << "***************************************" << endl; cout << "请输入合法的命题公式(以#结尾): ";
+	int flag = 1; //标记，防止重复添加命题变元
+	int count = 0; //命题变元的数目
+	cin >> str; //输入命题公式
+	length = strlen(str) - 1;
+	char index[10]; //命题变元数组
+	for (int i = 0; i < length; i++) //逐次添加命题变元
+	{
+		if (isalpha(str[i]) && (flag == 1))
+			index[count++] = str[i];
+		flag=1;
+		for (int k = 0; k < count; k++)
+			if (index[k] == str[i+1])
+				flag=0;
+	}
+	if (!count)
+	{
+		int flag_dx = 0;
+		cout << "主合取范式为 ";
+		for(r = 0; r < pow(2,count); r++) {
+			if (!truth[r])
+			{
+				if (flag_dx) cout << " /\\ "; cout << "M" << r; flag_dx = 1;
+			}
+		}
+		cout << endl;
+	}
+	else
+		cout << "没有主合取范式!" << endl; cout << "是否继续运算?(Y/N)" << endl; char goon;
+	cin >> goon;
+	if (goon=='y' || goon=='Y')
+	{
+		system("cls");
+		Solve(); //递归调用Solve，重新计算
+		}
+	else
+			exit(0);
+	}
+
+int main()
+	{
+		Calculator Cal(100);
+		Cal.Solve();
+		return 0;
+	}
+

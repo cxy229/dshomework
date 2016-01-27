@@ -1,0 +1,20 @@
+#include<iostream>
+using namespace std;
+
+int* fun1(int * p){
+	return p;
+}
+
+void fun2(int * & p){
+	*p = 3333;
+//	cout<<*p<<endl;
+}
+
+int main(){
+	int i = 2222;
+	int *k = &i;
+	cout<<&i<<endl;
+	cout<<fun2(fun1(&i))<<endl;
+	cout<<fun2(k)<<endl;
+	return 0;
+}

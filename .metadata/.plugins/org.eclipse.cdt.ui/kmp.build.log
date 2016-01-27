@@ -1,0 +1,7 @@
+12:40:06 **** Clean-only build of configuration Debug for project kmp ****
+make clean 
+rm -rf  ./src/kmp.o  ./src/kmp.d  kmp
+ 
+
+12:40:06 Build Finished (took 71ms)
+

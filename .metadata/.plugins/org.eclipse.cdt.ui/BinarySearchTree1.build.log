@@ -1,0 +1,19 @@
+19:06:14 **** Incremental Build of configuration Debug for project BinarySearchTree1 ****
+make all 
+Building file: ../src/binarysearchtree.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/binarysearchtree.d" -MT"src/binarysearchtree.d" -o "src/binarysearchtree.o" "../src/binarysearchtree.cpp"
+../src/binarysearchtree.cpp: In function ‘int main()’:
+../src/binarysearchtree.cpp:13:12: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+  char* s = "badc";
+            ^
+Finished building: ../src/binarysearchtree.cpp
+ 
+Building target: BinarySearchTree1
+Invoking: GCC C++ Linker
+g++  -o "BinarySearchTree1"  ./src/binarysearchtree.o   
+Finished building target: BinarySearchTree1
+ 
+
+19:06:14 Build Finished (took 346ms)
+

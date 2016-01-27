@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;graphall/src/eage.h&apos; to &apos;edge.h&apos;" description="Rename resource &apos;eage.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/eage.h" name="edge.h" stamp="1450441893441" updateReferences="true"/>
+</session>

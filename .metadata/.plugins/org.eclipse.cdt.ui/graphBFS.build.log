@@ -1,0 +1,15 @@
+09:58:44 **** Incremental Build of configuration Debug for project graphBFS ****
+make all 
+Building file: ../src/graphBFS.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/graphBFS.d" -MT"src/graphBFS.d" -o "src/graphBFS.o" "../src/graphBFS.cpp"
+Finished building: ../src/graphBFS.cpp
+ 
+Building target: graphBFS
+Invoking: GCC C++ Linker
+g++  -o "graphBFS"  ./src/AdjGraph.o ./src/Graph.o ./src/MinHeap.o ./src/graphBFS.o   
+Finished building target: graphBFS
+ 
+
+09:58:45 Build Finished (took 393ms)
+

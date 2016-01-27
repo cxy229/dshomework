@@ -1,0 +1,15 @@
+21:02:01 **** Incremental Build of configuration Debug for project datastructHW2 ****
+make all 
+Building file: ../src/datastructHW.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/datastructHW.d" -MT"src/datastructHW.d" -o "src/datastructHW.o" "../src/datastructHW.cpp"
+Finished building: ../src/datastructHW.cpp
+ 
+Building target: datastructHW2
+Invoking: GCC C++ Linker
+g++  -o "datastructHW2"  ./src/datastructHW.o   
+Finished building target: datastructHW2
+ 
+
+21:02:01 Build Finished (took 283ms)
+

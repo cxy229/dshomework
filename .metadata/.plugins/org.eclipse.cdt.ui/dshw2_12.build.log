@@ -1,0 +1,7 @@
+12:40:05 **** Clean-only build of configuration Debug for project dshw2_12 ****
+make clean 
+rm -rf  ./src/dshw2_12.o  ./src/dshw2_12.d  dshw2_12
+ 
+
+12:40:05 Build Finished (took 115ms)
+

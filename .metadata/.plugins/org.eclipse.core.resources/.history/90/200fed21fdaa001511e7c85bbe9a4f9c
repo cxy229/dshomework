@@ -1,0 +1,196 @@
+#include<iostream>
+using namespace std;
+
+class Edge
+{
+public:
+	int start;
+	int end;
+	int weight;
+	Edge(){weight=0;}
+	Edge(int st,int en,int w)
+	{
+		start=st;
+		end=en;
+		weight=w;
+	}
+	bool operator >(Edge other)
+	{
+		return weight>other.weight;
+	}
+	bool operator <(Edge other)
+	{
+		return weight<other.weight;
+	}
+	void operator =(Edge other)
+	{
+		start=other.start;
+		end=other.end;
+		weight=other.weight;
+	}
+};
+
+class AdjGraph
+{
+	int ** matrix;                    //无向图
+	int *arr;                         //顶点信息
+	int num;
+	int *Mark;
+public:
+	AdjGraph(int* a,int num)
+	{
+		int i,j;
+		arr=new int[num];
+		matrix=(int**)new int*[num];
+		for(i=0;i<num;i++)
+			matrix[i]=new int[num];
+		for(i=0;i<num;i++)
+			for(j=0;j<num;j++)
+				matrix[i][j]=0;
+		for(i=0;i<num;i++)
+			arr[i]=a[i];
+		Mark=new int [num];
+		this->num=num;
+	}
+
+	~AdjGraph()
+	{
+		for(int i=0;i<num;i++)
+			delete []matrix[i];
+		delete []matrix;
+	}
+
+	bool setEdge(int from,int to,int weight)       //带权无向图
+	{
+		if(from<num&&to<num)
+		{
+			matrix[from][to]=weight;
+			matrix[to][from]=weight;
+		}
+		else
+			return false;
+		return true;
+	}
+
+	int getNum()
+	{return num;}
+
+	int getEdge(int from,int to)
+	{
+		if(from<num&&to<num)
+			return matrix[from][to];
+		else
+			exit(0);
+	}
+
+	void DFS(int v)                                   //DFS
+	{
+		cout<<arr[v]<<ends;
+		Mark[v]=1;
+		for(int i=0;i<num;i++)
+			if(matrix[v][i]!=0&&Mark[i]==0)
+				DFS(i);
+	}
+
+	void DFSShow()
+	{
+		int i;
+		for(i=0;i<num;i++)
+			Mark[i]=0;
+		for(i=0;i<num;i++)
+			if(Mark[i]==0)
+				DFS(i);
+	}
+
+	Edge* tear()
+	{
+		int i,j,k,max1,max2;
+		Edge* find=new Edge[num-1];
+		int* degree=new int[num];
+		int count=0;
+		int** a;
+
+		a=(int**) new int[num];
+		for(i=0;i<num;i++)
+			a[i]=new int[num];
+
+		for(i=0;i<num;i++)
+		{
+			Mark[i]=0;
+			degree[i]=0;
+		}
+
+		for(i=0;i<num;i++)
+			for(j=0;j<num;j++)
+			{
+				a[i][j]=matrix[i][j];
+				if(matrix[i][j]!=0)
+					degree[i]++;
+			}
+
+		while(count!=num-1)
+		{
+			max1=max2=0;
+			for(i=0;i<num;i++)
+			{
+				if(Mark[i]==0&&degree[i]==1)
+				{
+					Mark[i]=1;
+					for(j=0;j<num;j++)
+						if(Mark[j]==0&&a[j][i]!=0)
+						{
+							find[count].start=j;
+							find[count].end=i;
+							find[count++].weight=a[i][j];
+							a[i][j]=a[j][i]=0;
+							degree[i]--;
+							degree[j]--;
+						}
+				}
+			}
+
+			for(i=0;i<num;i++)
+				for(j=0;j<num;j++)
+					if(a[max1][max2]<a[i][j])
+					{
+						max1=i;
+						max2=j;
+					}
+			a[max1][max2]=a[max2][max1]=0;
+			degree[max1]--;
+			degree[max2]--;
+		}
+		return find;
+	}
+};
+
+////////////////////////////////////无向带权图/////////////////////////////////////////////////////////////
+
+int main()
+{
+	int a[6]={0,1,2,3,4,5};
+	int sort[6];
+
+	Edge *e;
+	AdjGraph adj(a,6);
+
+	adj.setEdge(0,1,10);
+	adj.setEdge(0,2,5);
+	adj.setEdge(1,2,9);
+	adj.setEdge(3,1,6);
+	adj.setEdge(2,3,2);
+	adj.setEdge(2,5,13);
+	adj.setEdge(3,4,6);
+
+	cout<<"DFS :  ";
+	adj.DFSShow();
+	cout<<endl;
+
+	e=adj.tear();
+	for(int i=0;i<adj.getNum()-1;i++)
+	{
+		cout<<e[i].start<<ends<<e[i].end<<"  :"<<e[i].weight<<endl;
+	}
+
+	return 0;
+}

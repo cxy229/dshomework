@@ -1,0 +1,64 @@
+//============================================================================
+// Name        : dshw6_sort.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+template <class T>
+void InsertionSort(T data[],int n){//直接插入排序
+	int p;
+	T temp;
+	for(p=1;p<n;p++){
+		temp = data[p];
+		int i;
+		for(i=p-1;i>=0&&data[i]>temp;i--){
+				data[i+1]=data[i];
+		}
+		data[i+1]=temp;
+	}
+}
+
+template <class T>
+void BinaryInsertionSort(T data[],int n){
+	int p;
+	T temp;
+	int left=0,mid=0,right=0;
+	for(p=1;p<n;p++){
+		temp = data[p];
+		for(left=0,right=p-1;left<=right;){
+			mid = (left+right)/2;
+			if(temp<data[mid]){
+				right = mid-1;
+			}else{
+				left = mid+1;
+			}
+		}
+		int i;
+		for(i=p-1;i>=left;i--){
+			data[i+1]=data[i];
+		}
+		data[left]=temp;
+	}
+}
+
+int main() {
+	int data[10]={10,8,7,4,5,4,3,2,1,0};
+
+	InsertionSort<int>(data,10);
+	for(int i=0;i<10;i++){
+		cout<<data[i]<<",";
+	}
+	cout<<endl;
+
+	BinaryInsertionSort<int>(data,10);
+	for(int i=0;i<10;i++){
+		cout<<data[i]<<",";
+	}
+	cout<<endl;
+	return 0;
+}

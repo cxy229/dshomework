@@ -1,0 +1,71 @@
+#include<iostream>
+#include"Graph.h"
+using namespace std;
+
+
+int main(){
+
+	int a[3]={2,5,1};
+	int path[3],dis[3],**ad,**p;
+
+	Edge *e;
+	AdjGraph adj(a,3);
+	ad=(int**)new int*[adj.getNum()];
+	p=(int**)new int*[adj.getNum()];
+	for(int i=0;i<adj.getNum();i++)
+	{
+		ad[i]=new int[adj.getNum()];
+		p[i]=new int[adj.getNum()];
+	}
+
+	adj.setEdge(0,1,10);//设置有向图
+	adj.setEdge(0,2,5);
+	adj.setEdge(1,0,9);
+	adj.setEdge(1,2,6);
+	adj.setEdge(2,0,2);
+	adj.setEdge(2,1,13);
+
+//	cout<<"DFS :  ";
+//	adj.DFSShow();
+//
+//	cout<<endl<<"BFS :  ";
+//	adj.BFSShow();
+//	cout<<endl;
+//
+//	e=adj.prim(0);
+//	cout<<endl<<"Prim :"<<endl;
+//	for(int i=0;i<adj.getNum()-1;i++)
+//		cout<<"From :"<<e[i].start<<" To :"<<e[i].end<<"   :"<<e[i].weight<<endl;
+////
+//	e=adj.Kruskal();
+//	cout<<endl<<"Kruskal :"<<endl;
+//	for(int i=0;i<adj.getNum()-1;i++)
+//		cout<<"From :"<<e[i].start<<" To :"<<e[i].end<<"   :"<<e[i].weight<<endl;
+////
+//	cout<<endl<<"Dijkstra :"<<endl;
+//	adj.Dijkstra(0,path,dis);
+//	for(int i=0;i<adj.getNum();i++)
+//		cout<<path[i]<<endl;
+//	cout<<endl;
+//	for(int i=0;i<adj.getNum();i++)
+//		cout<<dis[i]<<endl;
+//	cout<<endl;
+
+	cout<<endl<<"Floyd :"<<endl;
+	adj.Floyd(ad,p);
+	cout<<"Adj :"<<endl;
+	for(int i=0;i<adj.getNum();i++)
+	{
+		for(int j=0;j<adj.getNum();j++)
+			cout<<ad[i][j]<<ends;
+		cout<<endl;
+	}
+	cout<<"Path :"<<endl;
+	for(int i=0;i<adj.getNum();i++)
+	{
+		for(int j=0;j<adj.getNum();j++)
+			cout<<p[i][j]<<ends;
+		cout<<endl;
+	}
+	return 0;
+}

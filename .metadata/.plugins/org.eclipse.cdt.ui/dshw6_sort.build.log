@@ -1,0 +1,15 @@
+20:00:57 **** Build of configuration Debug for project dshw6_sort ****
+make all 
+Building file: ../src/dshw6_sort.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/dshw6_sort.d" -MT"src/dshw6_sort.d" -o "src/dshw6_sort.o" "../src/dshw6_sort.cpp"
+Finished building: ../src/dshw6_sort.cpp
+ 
+Building target: dshw6_sort
+Invoking: GCC C++ Linker
+g++  -o "dshw6_sort"  ./src/dshw6_sort.o   
+Finished building target: dshw6_sort
+ 
+
+20:00:58 Build Finished (took 363ms)
+

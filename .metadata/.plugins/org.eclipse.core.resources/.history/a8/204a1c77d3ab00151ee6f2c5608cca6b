@@ -1,0 +1,34 @@
+//============================================================================
+// Name        : dshw6_sort.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+template <class T>
+void InsertionSort(T data[],int n){
+	int p;
+	T temp;
+	for(p=1;p<n;p++){
+		temp = data[p];
+		int i;
+		for(i=p-1;i>=0&&data[i]>data[p];i--){
+				data[i+1]=data[i];
+		}
+		data[i+1]=temp;
+	}
+}
+
+int main() {
+	int data[10]={9,8,7,6,5,4,3,2,1,0};
+	InsertionSort<int>(data,10);
+	for(int i=0;i<10;i++){
+		cout<<i<<",";
+	}
+	cout<<endl;
+	return 0;
+}

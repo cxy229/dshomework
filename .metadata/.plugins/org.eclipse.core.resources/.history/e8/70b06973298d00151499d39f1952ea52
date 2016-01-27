@@ -1,0 +1,19 @@
+// please don't pass any command-line arguments
+#include <stdio.h>
+main() {
+    int i;
+    for(i=447; i>=0; i--) {
+        if(i % 64 == 0) {
+            putchar('\n');
+        } else {
+            char t = __TIME__[7 - i/8%8];
+            char a = ">'txiZ^(~z?"[t - 48] + 1;
+            int shift = ";;;====~$::199"[(i*2&8) | (i/64)];
+            if((i & 2) == 0)
+                shift /= 8;
+            shift = shift % 8;
+            char b = a >> shift;
+            putchar(32 | (b & 1));
+        }
+    }
+}

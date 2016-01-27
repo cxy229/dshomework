@@ -1,0 +1,20 @@
+#include <iostream>
+#include<string.h>
+using namespace std;
+
+char pre[50] = "ABDHLEKCFG";        //前序序列
+char mid[50] = "HLDBEKAFCG";        //中序序列
+char post[50] = "LHDKEBFGCA";        //后序序列
+
+int Position(char c)
+{
+    return strchr(mid,c)-mid;
+}
+int main()
+{
+    cout<<Position('L');
+
+    return 0;
+}
+
+

@@ -1,0 +1,15 @@
+14:07:00 **** Incremental Build of configuration Debug for project BinaryTree ****
+make all 
+Building file: ../src/BinaryTree.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/BinaryTree.d" -MT"src/BinaryTree.d" -o "src/BinaryTree.o" "../src/BinaryTree.cpp"
+Finished building: ../src/BinaryTree.cpp
+ 
+Building target: BinaryTree
+Invoking: GCC C++ Linker
+g++  -o "BinaryTree"  ./src/BinaryTree.o   
+Finished building target: BinaryTree
+ 
+
+14:07:00 Build Finished (took 276ms)
+

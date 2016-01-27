@@ -1,0 +1,15 @@
+20:46:28 **** Incremental Build of configuration Debug for project dsHW8 ****
+make all 
+Building file: ../src/dsHW8.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/dsHW8.d" -MT"src/dsHW8.d" -o "src/dsHW8.o" "../src/dsHW8.cpp"
+Finished building: ../src/dsHW8.cpp
+ 
+Building target: dsHW8
+Invoking: GCC C++ Linker
+g++  -o "dsHW8"  ./src/dsHW8.o   
+Finished building target: dsHW8
+ 
+
+20:46:28 Build Finished (took 270ms)
+

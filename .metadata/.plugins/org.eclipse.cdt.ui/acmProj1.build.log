@@ -1,0 +1,15 @@
+21:38:52 **** Incremental Build of configuration Debug for project acmProj1 ****
+make all 
+Building file: ../src/acmProj1.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/acmProj1.d" -MT"src/acmProj1.d" -o "src/acmProj1.o" "../src/acmProj1.cpp"
+Finished building: ../src/acmProj1.cpp
+ 
+Building target: acmProj1
+Invoking: GCC C++ Linker
+g++  -o "acmProj1"  ./src/acmProj1.o   
+Finished building target: acmProj1
+ 
+
+21:38:55 Build Finished (took 2s.429ms)
+

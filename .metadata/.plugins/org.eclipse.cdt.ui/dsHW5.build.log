@@ -1,0 +1,6 @@
+12:40:05 **** Clean-only build of configuration Default for project dsHW5 ****
+make clean 
+make: *** No rule to make target 'clean'.  Stop.
+
+12:40:05 Build Finished (took 84ms)
+

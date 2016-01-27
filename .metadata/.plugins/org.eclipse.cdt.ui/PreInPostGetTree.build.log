@@ -1,0 +1,15 @@
+18:26:07 **** Incremental Build of configuration Debug for project PreInPostGetTree ****
+make all 
+Building file: ../src/PreInPostGetTree.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/PreInPostGetTree.d" -MT"src/PreInPostGetTree.d" -o "src/PreInPostGetTree.o" "../src/PreInPostGetTree.cpp"
+Finished building: ../src/PreInPostGetTree.cpp
+ 
+Building target: PreInPostGetTree
+Invoking: GCC C++ Linker
+g++  -o "PreInPostGetTree"  ./src/PreInPostGetTree.o   
+Finished building target: PreInPostGetTree
+ 
+
+18:26:10 Build Finished (took 2s.871ms)
+

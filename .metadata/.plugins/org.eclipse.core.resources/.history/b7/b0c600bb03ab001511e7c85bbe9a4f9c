@@ -1,0 +1,623 @@
+/*
+ * Graph.h
+ *
+ *  Created on: Dec 17, 2015
+ *      Author: cxy229
+ */
+
+#ifndef GRAPH_H_
+#define GRAPH_H_
+
+#include<iostream>
+#include<iomanip>//声明一些流操作符
+using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <queue>
+#include "edge.h"
+#include "MinHeap.h"
+#include "ufsets.h"
+//最大权值
+#define MAXWEIGHT 100
+#define VISITED true
+#define UNVISITED false
+
+//用邻接矩阵实现图
+class Graph {
+public:
+	//numV顶点数，isWeighted是否带权值，isDirected是否有向
+	Graph(int numV, bool isWeighted, bool isDirected);
+	//建图
+	void createGraph();
+	~Graph();
+	//获取顶点数
+	int GetVernums() {
+		return numV;
+	}
+	//获取边数
+	int GetEdgeS() {
+		return numE;
+	}
+	//设定给定边的权值
+	void setEdgeWeight(int start, int end, int weight);
+	//打印邻接矩阵
+	void printAdjacentMatrix();
+	//检查输入
+	bool check(int i, int j, int w = 1);
+	void DFS(int v)                                   //DFS
+			{
+		printf("%d ", v);
+		Mark[v] = VISITED;
+		for (int i = 0; i < numV; i++)
+			if (matrix[v][i] != 0 && Mark[i] == UNVISITED) {
+				DFS(i);
+			}
+	}
+
+	void DFSTraverse()                                   //DFS算法遍历图
+	{
+		int i;
+		for (i = 0; i < numV; i++)
+			Mark[i] = UNVISITED;
+		for (i = 0; i < numV; i++)
+			if (Mark[i] == UNVISITED) {
+				DFS(i);
+			}
+	}
+	void BFS(int v)                             //BFS
+			{
+		queue<int> que;
+		printf("%d ", v);
+		Mark[v] = VISITED;
+		que.push(v);
+		while (!que.empty()) {
+			v = que.front();
+			que.pop();
+			for (int i = 0; i < numV; i++)
+				if (matrix[v][i] != 0 && Mark[i] == UNVISITED) {
+					printf("%d ", i);
+					Mark[i] = VISITED;
+					que.push(i);
+				}
+		}
+	}
+
+	void BFSTraverse()                             //BFS算法遍历图
+	{
+		int v;
+		for (v = 0; v < numV; v++)
+			Mark[v] = UNVISITED;
+		for (v = 0; v < numV; v++)
+			if (Mark[v] == UNVISITED)
+				BFS(v);
+	}
+	Edge* prim(int v)                                  //Prim
+			{
+		int i;
+		Edge e;
+		Edge* mini = new Edge[numV - 1];  //储存最小生成树的边
+		Minheap<Edge> mp(numV * numV);
+
+		for (i = 0; i < numV; i++)
+			Mark[i] = UNVISITED;
+		Mark[v] = VISITED;
+
+		for (int j = 0; j < numV - 1; j++) {
+			for (i = 0; i < numV; i++) {  //所有和v有关的边放入最小堆中
+				if (matrix[v][i] != 0 && Mark[i] == UNVISITED) {
+					e.start = v;
+					e.end = i;
+					e.weight = matrix[v][i];
+					mp.insert(e);
+				}
+			}
+			mp.deleteMin(e);  //取出权值最小的边
+
+			while (Mark[e.end] == VISITED && Mark[e.start] == VISITED) {
+				mp.deleteMin(e);
+			}
+
+			mini[j] = e;
+			v = e.end;
+			Mark[v] = VISITED;
+		}
+		return mini;
+	}
+	Edge* Kruskal()                                    //Kruskal
+	{
+		UFSets set(numV);
+		Edge* mini=new Edge[numV-1];
+		Minheap<Edge> mp(numV*numV);
+		Edge e;
+		int i,j;
+		int edgeNum=0;
+
+		for(i=0;i<numV;i++)//初始化Mark
+			Mark[i]=UNVISITED;
+
+		for(i=0;i<numV;i++)
+		{
+			Mark[i]=VISITED;
+			for(j=0;j<numV;j++)
+				if(matrix[i][j]!= MAXWEIGHT && Mark[j]==UNVISITED)
+				{
+					e.start=i;
+					e.end=j;
+					e.weight=matrix[i][j];
+					mp.insert(e);
+				}
+		}
+
+		while(edgeNum<numV-1)
+		{
+			if(!mp.isEmpty())
+			{
+				mp.deleteMin(e);
+				if(!set.Find(e.start,e.end))
+				{
+					mini[edgeNum++]=e;
+					set.Union(e.start,e.end);
+				}
+			}
+			else
+				exit(0);
+		}
+		return mini;
+	}
+	void Dijkstra(int s,int path[],int dis[])//s源点  path[i]前驱顶点编号  dis[i]s到i的最小距离
+	{
+		int i,j,min=MAXWEIGHT;
+		for(i=0;i<numV;i++)
+		{
+			Mark[i]=UNVISITED;
+			path[i]=-1;
+			dis[i]=matrix[s][i];
+		}
+		path[s]=s;
+		Mark[s]=VISITED;
+
+		for(i=0;i<numV;i++){
+			min = dis[0];
+			int k = s;
+			for(j = 1;j<numV;j++){
+				if(Mark[j]==UNVISITED && dis[j] < min){
+					min = dis[j];
+					k = j;
+				}
+			}
+
+			Mark[k]=VISITED;
+
+			for(int ii=0;ii<numV;ii++){
+				if(matrix[k][ii] != MAXWEIGHT && Mark[ii]==UNVISITED && (dis[k]+matrix[k][ii])<dis[ii]){
+					dis[ii] = dis[k]+matrix[k][ii];
+					path[ii]=k;
+				}
+			}
+		}
+//		int i,j;
+//		int min=-1;
+//		for(i=0;i<numV;i++)
+//		{
+//			Mark[i]=UNVISITED;
+//			path[i]=-1;
+//			dis[i]=MAXWEIGHT;
+//		}
+//
+//		path[s]=s;
+//		Mark[s]=VISITED;
+//
+//		for(i=0;i<numV;i++)
+//		{
+//
+//			for(j=0;j<numV;j++)
+//				if(Mark[j]==UNVISITED)
+//				{
+//					if(min==-1)
+//					{
+//						dis[j]=matrix[s][j];
+//						if(dis[j]!=0)
+//							path[j]=s;
+//					}
+//					else if(dis[min]!=0&&matrix[s][j]!=0&&(dis[j]==0||dis[j]>dis[min]+matrix[s][j]))
+//					{
+//						dis[j]=dis[min]+matrix[s][j];
+//						path[j]=min;
+//					}
+//				}
+//
+//			min=-2;
+//			for(j=0;j<numV;j++)
+//			{
+//				if(Mark[j]==UNVISITED)
+//				{
+//					if(min<0)
+//						min=j;
+//					else if(dis[j]!=0&&dis[j]<dis[min])
+//						min=j;
+//				}
+//			}
+//
+//			Mark[min]=VISITED;
+//			s=min;
+//		}
+	}
+	void Floyd(int **adj,int **path)
+	{
+		int i,j,v;
+
+		for(i=0;i<numV;i++){//初始化
+			for(j=0;j<numV;j++)
+			{
+				adj[i][j]=matrix[i][j];
+				path[i][j]=i;
+			}
+		}
+		for(v=0;v<numV;v++)
+			for(i=0;i<numV;i++)
+				for(j=0;j<numV;j++)
+				{
+						if(adj[i][j]>adj[i][v]+adj[v][j])
+						{
+							adj[i][j]=adj[i][v]+adj[v][j];
+							path[i][j]=v;
+						}
+				}
+	}
+	bool circle(int *res)
+	{
+//		Edge* find=new Edge[numV];
+		int* degree=new int[numV];//顶点的出度
+		int count=0;
+		int v;
+		int** a;//权值
+
+		a=(int**) new int[numV];
+		int i;
+		for(i=0;i<numV;i++)
+			a[i]=new int[numV];
+
+		for(i=0;i<numV;i++)//初始化Mark degree
+		{
+			Mark[i]=UNVISITED;
+			degree[i]=0;
+		}
+		int j=0;
+		for(i=0;i<numV;i++)//初始化a,degree
+		{
+			for(j=0;j<numV;j++)
+			{
+				a[i][j]=matrix[i][j];
+				if(matrix[i][j]!=MAXWEIGHT)
+					degree[i]++;
+			}
+		}
+		for(i = 0;i<numV;i++){
+			for(v=0;v<numV;v++){
+				if(degree[v]==0&&Mark[v]==UNVISITED){
+					break;
+				}
+			}
+			if(v == numV){return false;}
+			Mark[v]= VISITED;
+			res[i] = v;
+			for(int ii=0;ii<numV;ii++){
+				if(matrix[ii][i]==MAXWEIGHT){
+					degree[ii]--;
+				}
+			}
+		}
+		return true;
+//		for(i = 0;i<numV;i++){//删除所有出度为0的顶点
+//			if(Mark[i]==UNVISITED && degree[i]==0){
+//				Mark[i]=VISITED;
+//				bool flag=false;
+//				for(int ii=0;ii<numV;ii++){
+//					if(a[ii][i]!=MAXWEIGHT){
+//						a[ii][i]=MAXWEIGHT;
+//						flag = true;
+//					}
+//				}
+//				if(flag==true){//从头开始
+//					for(int iii=0;iii<numV;iii++)
+//						if(Mark[iii]==UNVISITED){
+//							i = iii-1;
+//						}
+//				}
+//			}
+//		}
+//		int ii=0;
+//		for(i=0;i<numV;i++){
+//			for(ii=0;ii<numV;ii++){
+//				if(a[i][ii]!=MAXWEIGHT){
+//					find[count].start=i;
+//					find[count].end=ii;
+//					find[count].weight=a[i][ii];
+//					count++;
+//				}
+//			}
+//		}
+//		if(count<1){
+//			cout<<"无回路"<<endl;
+//		}
+//		return find;
+
+	}
+	void ToploySort(){
+			int num = numV;
+			int *outdegree = new int[num];  //  出度
+			int i,j,k;
+			int flag = 0;
+			int count = 0;
+			for(i = 0;i < num;i++)
+			{
+				Mark[i] = UNVISITED;
+				outdegree[i] = 0;
+			}
+			//  将每个结点的出度和入度记录
+			for(i = 0;i < num;i++){
+				for(j = 0;j < num;j++)
+					if(matrix[i][j] != MAXWEIGHT)
+					{
+						//indegree[j]++;
+						outdegree[i]++;
+					}
+			}
+			for(k = 0;k < num;k++){
+				for(i = 0;i < num;i++){
+					if(outdegree[i] == 0){
+
+						outdegree[i] = -1;     //  避免重复删除
+						for(j = 0;j < num;j++){
+							if(matrix[j][i] != MAXWEIGHT){
+								matrix[j][i] = MAXWEIGHT;
+								outdegree[j]--;
+
+							}
+						}
+						cout<<endl;
+					}
+				}
+			}
+			for(i = 0;i < num;i++){
+				if(outdegree[i] > 0){
+					flag = 1;
+
+				}
+			}
+			if(flag == 1){
+				for(i = 0;i < num;i++){
+					for(j = 0;j < num;j++){
+						if(matrix[i][j] != MAXWEIGHT){
+							cout<<"From  : "<<i<<"  To: "<<j<<endl;
+							break;
+						}
+					}
+				}
+
+
+			}
+			else{
+				cout<<"  没有回路。 "<<endl;
+			}
+		}
+
+	Edge* breakCircle()
+	{
+		int num = numV;
+		int *outdegree = new int[num];  //  出度
+		int i,j,k;
+		int flag = 0;
+		int count = 0;
+		for(i = 0;i < num;i++)
+		{
+			Mark[i] = UNVISITED;
+			outdegree[i] = 0;
+		}
+		//  将每个结点的出度和入度记录
+		for(i = 0;i < num;i++){
+			for(j = 0;j < num;j++)
+				if(matrix[i][j] != MAXWEIGHT)
+				{
+					//indegree[j]++;
+					outdegree[i]++;
+				}
+		}
+		for(k = 0;k < num;k++){
+			for(i = 0;i < num;i++){
+				if(outdegree[i] == 0){
+
+					outdegree[i] = -1;     //  避免重复删除
+					for(j = 0;j < num;j++){
+						if(matrix[j][i] != MAXWEIGHT){
+							matrix[j][i] = MAXWEIGHT;
+							outdegree[j]--;
+
+						}
+					}
+					cout<<endl;
+				}
+			}
+		}
+		for(i = 0;i < num;i++){
+			if(outdegree[i] > 0){
+				flag = 1;
+
+			}
+		}
+		if(flag == 1){
+			for(i = 0;i < num;i++){
+				for(j = 0;j < num;j++){
+					if(matrix[i][j] != MAXWEIGHT){
+						cout<<"From  : "<<i<<"  To: "<<j<<endl;
+						break;
+					}
+				}
+			}
+
+
+		}
+		else{
+			cout<<"  没有回路。 "<<endl;
+		}
+	}
+private:
+	//是否带权
+	bool isWeighted;
+	//是否有向
+	bool isDirected;
+	//顶点数
+	int numV;
+	//边数
+	int numE;
+	//邻接矩阵
+	int **matrix;  //指向邻接矩阵的指针
+	bool *Mark;  //标记是否被遍历
+};
+//构造方法，numV顶点数，isWeighted是否带权值，isDirected是否有向
+Graph::Graph(int numV, bool isWeighted, bool isDirected) {
+	this->numV = numV;
+	this->isWeighted = isWeighted;
+	this->isDirected = isDirected;
+	this->numE = 0;
+	matrix = new int *[numV];  //指针数组
+	Mark = new bool[numV];
+	int i, j;
+	for (i = 0; i < numV; i++) {
+		matrix[i] = new int[numV];
+		Mark[i] = UNVISITED;
+	}
+	//对图进行初始化
+	if (!isWeighted)  //无权图
+	{
+		//所有权值初始化为0
+		for (i = 0; i < numV; i++) {
+			for (j = 0; j < numV; j++)
+				matrix[i][j] = 0;
+		}
+	} else //有权图
+	{
+		//所有权值初始化为最大权值
+		for (i = 0; i < numV; i++) {
+			for (j = 0; j < numV; j++)
+				matrix[i][j] = MAXWEIGHT;
+		}
+	}
+
+}
+//建图
+void Graph::createGraph() {
+	cout << "输入边数:";
+	while (cin >> numE && numE < 0)
+		cout << "输入有误！，重新输入 ";
+
+	int i, j, w;
+	this->numE = numE;
+	if (!isWeighted)  //无权图
+	{
+		if (!isDirected)  //无向图
+		{
+			cout << "输入每条边的起点和终点：\n";
+			for (int k = 0; k < numE; k++) {
+				cin >> i >> j;
+				while (!check(i, j)) {
+					cout << "输入的边不对！重新输入\n";
+					cin >> i >> j;
+				}
+				matrix[i][j] = matrix[j][i] = 1;
+			}
+		} else  //有向图
+		{
+			cout << "输入每条边的起点和终点：\n";
+			for (int k = 0; k < numE; k++) {
+				cin >> i >> j;
+				while (!check(i, j)) {
+					cout << "输入的边不对！重新输入\n";
+					cin >> i >> j;
+				}
+				matrix[i][j] = 1;
+			}
+		}
+	} else  //有权图
+	{
+		if (!isDirected)   //无向图
+		{
+			cout << "输入每条边的起点、终点和权值：\n";
+			for (int k = 0; k < numE; k++) {
+				cin >> i >> j >> w;
+				while (!check(i, j, w)) {
+					cout << "输入的边不对！重新输入\n";
+					cin >> i >> j >> w;
+				}
+				matrix[i][j] = matrix[j][i] = w;
+			}
+		} else  //有向图
+		{
+			cout << "输入每条边的起点、终点和权值：\n";
+			for (int k = 0; k < numE; k++) {
+				cin >> i >> j >> w;
+				while (!check(i, j, w)) {
+					cout << "输入的边不对！重新输入\n";
+					cin >> i >> j >> w;
+				}
+				matrix[i][j] = w;
+			}
+		}
+	}
+}
+
+//析构方法
+Graph::~Graph() {
+	int i = 0;
+	for (i = 0; i < numV; i++)
+		delete[] matrix[i];
+	delete[] matrix;
+}
+//设置指定边的权值
+void Graph::setEdgeWeight(int start, int end, int weight) {
+	if (isWeighted)  //有权图
+	{
+		while (!check(start, end, weight)) {
+			cout << "输入不正确，重新输入边的起点，终点和权值" << endl;
+			cin >> start >> end >> weight;
+		}
+		if (isDirected)
+			matrix[start][end] = weight;
+		else
+			matrix[start][end] = matrix[start][end] = weight;
+	} else  //无权图
+	{
+		while (!check(start, end, 1)) {
+			cout << "输入不正确，重新输入边的起点和终点" << endl;
+			cin >> start >> end;
+		}
+		if (isDirected)
+			matrix[start][end] = (weight != 0) ? 1 : 0;
+		else
+			matrix[start][end] = matrix[end][start] = (weight != 0) ? 1 : 0;
+	}
+}
+//检查输入是否有误
+bool Graph::check(int i, int j, int w) {
+	if (i >= 0 && i < numV && j >= 0 && j < numV && w > 0 && w <= MAXWEIGHT)
+		return true;
+	else
+		return false;
+}
+//打印邻接矩阵
+void Graph::printAdjacentMatrix() {
+	int i, j;
+	cout.setf(ios::left);
+	cout << setw(4) << " ";
+	for (i = 0; i < numV; i++)
+		cout << setw(4) << i;
+	cout << endl;
+	for (i = 0; i < numV; i++) {
+		cout << setw(4) << i;
+		for (j = 0; j < numV; j++)
+			cout << setw(4) << matrix[i][j];
+		cout << endl;
+	}
+}
+
+#endif /* GRAPH_H_ */

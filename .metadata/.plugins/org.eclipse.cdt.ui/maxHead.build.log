@@ -1,0 +1,15 @@
+20:03:23 **** Incremental Build of configuration Debug for project maxHead ****
+make all 
+Building file: ../src/maxHead.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/maxHead.d" -MT"src/maxHead.d" -o "src/maxHead.o" "../src/maxHead.cpp"
+Finished building: ../src/maxHead.cpp
+ 
+Building target: maxHead
+Invoking: GCC C++ Linker
+g++  -o "maxHead"  ./src/maxHead.o   
+Finished building target: maxHead
+ 
+
+20:03:24 Build Finished (took 757ms)
+

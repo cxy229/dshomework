@@ -1,0 +1,15 @@
+19:47:16 **** Incremental Build of configuration Debug for project dshw3_4_1_1 ****
+make all 
+Building file: ../src/dshw3_4_1_1.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/dshw3_4_1_1.d" -MT"src/dshw3_4_1_1.d" -o "src/dshw3_4_1_1.o" "../src/dshw3_4_1_1.cpp"
+Finished building: ../src/dshw3_4_1_1.cpp
+ 
+Building target: dshw3_4_1_1
+Invoking: GCC C++ Linker
+g++  -o "dshw3_4_1_1"  ./src/dshw3_4_1_1.o   
+Finished building target: dshw3_4_1_1
+ 
+
+19:47:17 Build Finished (took 1s.369ms)
+
